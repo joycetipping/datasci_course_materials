@@ -1,17 +1,39 @@
+# Twitter Sentiment Scorer
+# Joyce Tipping
+# Coursera | Intro to Data Sci | Dr. Howe
+
+import json
+import string
 import sys
 
-def hw():
-    print 'Hello, world!'
-
-def lines(fp):
-    print str(len(fp.readlines()))
-
 def main():
-    sent_file = open(sys.argv[1])
+    # Grab our files from the names given:
+    # 1) The AFINN file
+    # 2) The tweet data
+    afinn_file = open(sys.argv[1])
     tweet_file = open(sys.argv[2])
-    hw()
-    lines(sent_file)
-    lines(tweet_file)
+
+    # Read the AFINN scores into a dictionary
+    scores = {}
+    for line in afinn_file:
+        term, score = line.split("\t")
+        scores[term] = int(score)
+
+    # Parse each tweet into words and total up their AFINN scores.
+    tweet_scores = []
+    for line in tweet_file:
+        tweet = json.loads(line)
+        words = tweet['text'].split() if 'text' in tweet.keys() else []
+
+        tweet_score = 0
+        for word in words:
+            bare_word = word.strip(string.punctuation).lower() # Strip leading and trailing punctuation and convert to lowercase
+            afinn_terms = scores.keys()
+            tweet_score += scores[bare_word] if bare_word in afinn_terms else 0
+
+        tweet_scores.append(tweet_score)
+
+    print "\n".join(map(str, tweet_scores))
 
 if __name__ == '__main__':
     main()
