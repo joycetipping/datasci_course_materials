@@ -1,6 +1,10 @@
-# Twitter Sentiment Scorer
+# 1.2. Derive the sentiment of each tweet
 # Joyce Tipping
 # Coursera | Intro to Data Sci | Dr. Howe
+
+# This script takes an AFINN file and a file of twitter data and calculates the
+# sentiment score of each tweet as the sum of the AFINN scores of the known
+# words it contains. Unknown words are ignored.
 
 import json
 import string
